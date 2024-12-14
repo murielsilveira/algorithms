@@ -26,6 +26,21 @@ func main() {
 	assert(binarySearch(ints, -1), false, "binary search not found failed")
 
 	assert(crystalBalls(bols), 3, "crystal balls failed")
+
+	assertArr(bubbleSort([]int{4, 3, 2, 1, 0}), []int{0, 1, 2, 3, 4}, "bubble sort failed")
+}
+
+func bubbleSort(arr []int) []int {
+	for i := 0; i < len(arr); i++ {
+		for j := 0; j < len(arr)-i-1; j++ {
+			if arr[j] > arr[j+1] {
+				tmp := arr[j]
+				arr[j] = arr[j+1]
+				arr[j+1] = tmp
+			}
+		}
+	}
+	return arr
 }
 
 // Given two crystal balls that will break if dropped from high enough
@@ -98,5 +113,19 @@ func assert[T comparable](a T, b T, msg string) {
 	if a != b {
 		compare := fmt.Sprintf("a = %v\nb = %v", a, b)
 		panic(fmt.Sprintf("Assert Error: %s\n\n%s", msg, compare))
+	}
+}
+
+func assertArr[T comparable](a []T, b []T, msg string) {
+	if len(a) != len(b) {
+		compare := fmt.Sprintf("len(a) = %v\nlen(b) = %v", len(a), len(b))
+		panic(fmt.Sprintf("Assert Error: %s\n\n%s", msg, compare))
+	}
+
+	for i := 0; i < len(a); i++ {
+		if a[i] != b[i] {
+			compare := fmt.Sprintf("a[%v] = %v\nb[%v] = %v", i, a[i], i, b[i])
+			panic(fmt.Sprintf("Assert Error: %s\n\n%s", msg, compare))
+		}
 	}
 }
