@@ -3,12 +3,14 @@ package main
 import (
 	"cmp"
 	"fmt"
+	"math"
 )
 
 func main() {
 	fmt.Println("hey")
 	ints := []int{0, 1, 2, 3, 4}
 	strs := []string{"0", "1", "2", "3", "4"}
+	bols := []bool{false, false, false, true, true}
 
 	assert(linearSearch(ints, 4), true, "linear search found failed")
 	assert(linearSearch(strs, "4"), true, "linear search found failed")
@@ -22,6 +24,31 @@ func main() {
 	assert(binarySearch(ints, 4), true, "binary search found failed")
 	assert(binarySearch(ints, 10), false, "binary search not found failed")
 	assert(binarySearch(ints, -1), false, "binary search not found failed")
+
+	assert(crystalBalls(bols), 3, "crystal balls failed")
+}
+
+// Given two crystal balls that will break if dropped from high enough
+// distance, determine the exact spot in which it will break in the most
+// optimized way.
+func crystalBalls(arr []bool) int {
+	jump := int(math.Sqrt(float64(len(arr))))
+
+	i := jump
+	for ; i < len(arr); i += jump {
+		if arr[i] == true {
+			break
+		}
+	}
+
+	i -= jump
+	for ; i < i+jump && i < len(arr); i++ {
+		if arr[i] == true {
+			return i
+		}
+	}
+
+	return -1
 }
 
 // Array needs to be sorted.
@@ -69,6 +96,7 @@ func linearSearch[T comparable](arr []T, v T) bool {
 
 func assert[T comparable](a T, b T, msg string) {
 	if a != b {
-		panic(fmt.Sprintf("Assert Error: %s", msg))
+		compare := fmt.Sprintf("a = %v\nb = %v", a, b)
+		panic(fmt.Sprintf("Assert Error: %s\n\n%s", msg, compare))
 	}
 }
